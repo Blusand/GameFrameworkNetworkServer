@@ -21,11 +21,6 @@ class Program
                     messagePacket.SetMsg(1001, "这是服务器发来的消息");
                     serverSocket.Broadcast(messagePacket);
                     break;
-                case "1002":
-                    PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket();
-                    playerInfoPacket.SetMsg(25, "玩家2", 21, 591, 48100.1f, "我是机器人");
-                    serverSocket.Broadcast(playerInfoPacket);
-                    break;
                 case "Quit":
                 case "q":
                 case "Q":

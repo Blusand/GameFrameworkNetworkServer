@@ -137,7 +137,7 @@ public class ClientSocket
                     case (int)PacketType.Message:
                         baseMsg = new MessagePacket();
                         break;
-                    case (int)PacketType.PlayerInfo:
+                    case (int)PacketType.CSPlayerInfo:
                         baseMsg = new PlayerInfoPacket();
                         break;
                     case (int)PacketType.QuitMsg:
@@ -198,6 +198,9 @@ public class ClientSocket
                 break;
             case PlayerInfoPacket playerInfoPacket:
                 Console.WriteLine($"{playerInfoPacket.Id}: {playerInfoPacket.GetMsg()}");
+                // 客户端请求玩家数据，直接将玩家数据返回
+                playerInfoPacket.SetMsg(25, "玩家2", 21, 591, 48100.1f, "这个玩家很懒，什么都没有写");
+                Send(playerInfoPacket);
                 break;
             case QuitPacket quitPacket:
                 // 收到断开连接消息，把自己添加到待移除的列表当中
