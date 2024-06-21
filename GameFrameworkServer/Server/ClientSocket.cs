@@ -194,10 +194,10 @@ public class ClientSocket
                 Send(m_HeartBeatPacket);
                 break;
             case MessagePacket messagePacket:
-                Console.WriteLine($"{messagePacket.Id}: {messagePacket.GetMsg()}");
+                Console.WriteLine($"{messagePacket.Id}: {messagePacket.Msg}");
                 break;
             case PlayerInfoPacket playerInfoPacket:
-                Console.WriteLine($"{playerInfoPacket.Id}: {playerInfoPacket.GetMsg()}");
+                Console.WriteLine($"{playerInfoPacket.Id}: {playerInfoPacket.Msg}");
                 // 客户端请求玩家数据，直接将玩家数据返回
                 playerInfoPacket.SetMsg(25, "玩家2", 21, 591, 48100.1f, "这个玩家很懒，什么都没有写");
                 Send(playerInfoPacket);

@@ -4,37 +4,43 @@ namespace GameFrameworkServer.Msg;
 
 public abstract class PacketBase
 {
-    /// <summary>
-    /// 消息ID
-    /// </summary>
     public abstract int Id { get; }
+    public abstract int HeaderLength { get; }
+    public abstract int PacketLength { get; }
+    public abstract byte[] Serialize();
+    public abstract void Deserialize(byte[] bytes, int offset, int packetLength);
+}
+
+public abstract class PacketBase<T> : PacketBase where T : class, IMessage, new()
+{
+    /// <summary>
+    /// 包头长度
+    /// </summary>
+    public override int HeaderLength => 2 * sizeof(int);
 
     /// <summary>
-    /// 消息长度
+    /// 消息体长度
     /// </summary>
-    public int PacketLength => Msg.CalculateSize();
+    public override int PacketLength => Msg.CalculateSize();
 
-    private int HeaderLength => 2 * sizeof(int);
+    public T Msg { get; private set; } = new T();
 
-    /// <summary>
-    /// 消息体
-    /// </summary>
-    protected abstract IMessage Msg { get; set; }
-
-    public byte[] Serialize()
+    public override byte[] Serialize()
     {
         byte[] bytes = new byte[HeaderLength + PacketLength];
         int index = 0;
+        // 包头
         BitConverter.GetBytes(Id).CopyTo(bytes, index);
         index += sizeof(int);
         BitConverter.GetBytes(PacketLength).CopyTo(bytes, index);
         index += sizeof(int);
+        // 包体
         Msg.ToByteArray().CopyTo(bytes, index);
         return bytes;
     }
 
-    public void Deserialize(byte[] bytes, int offset, int packetLength)
+    public override void Deserialize(byte[] bytes, int offset, int packetLength)
     {
-        Msg = Msg.Descriptor.Parser.ParseFrom(bytes, offset, packetLength);
+        Msg = Msg.Descriptor.Parser.ParseFrom(bytes, offset, packetLength) as T;
     }
 }

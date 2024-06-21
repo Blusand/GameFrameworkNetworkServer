@@ -1,26 +1,18 @@
-using Google.Protobuf;
 using Test;
 
 namespace GameFrameworkServer.Msg;
 
-public class PlayerInfoPacket : PacketBase
+public class PlayerInfoPacket : PacketBase<SCPlayerInfo>
 {
     public override int Id => (int)PacketType.SCPlayerInfo;
-    protected override IMessage Msg { get; set; } = new SCPlayerInfo();
 
     public void SetMsg(int id, string name, int lv, int exp, float gold, string desc)
     {
-        var playerInfo = Msg as SCPlayerInfo;
-        playerInfo.Id = id;
-        playerInfo.Name = name;
-        playerInfo.Lv = lv;
-        playerInfo.Exp = exp;
-        playerInfo.Gold = gold;
-        playerInfo.Desc = desc;
-    }
-
-    public SCPlayerInfo GetMsg()
-    {
-        return Msg as SCPlayerInfo;
+       Msg.Id = id;
+       Msg.Name = name;
+       Msg.Lv = lv;
+       Msg.Exp = exp;
+       Msg.Gold = gold;
+       Msg.Desc = desc;
     }
 }
